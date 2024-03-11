@@ -20,7 +20,7 @@ module Data_path (
     output [9:0] q_out
 );
     wire [10:0] ACC, ACC_next, ACC_in, ACC_sub, ACC_else;
-    wire [10:0] Q, Q_next, Q_in, Q_sub, Q_else;
+    wire [9:0] Q, Q_next, Q_in, Q_sub, Q_else;
     wire [10:0] sub_out;
     wire [9:0] B;
     wire [3:0] count_out;
@@ -32,17 +32,17 @@ module Data_path (
     assign {ACC_else, Q_else} = {ACC[9:0], Q, 1'b10};
 
     // Reg
-    Reg #(11) ACC_reg (clk, sclr, ld_ACC, ACC_next, ACC);
-    Reg #(10) Q_reg (clk, sclr, ld_Q, Q_next, Q);
-    Reg #(10) B_reg (clk, sclr, ld_B, in_B, B);
+    Reg #(.bit(11)) ACC_reg (clk, sclr, ld_ACC, ACC_next, ACC);
+    Reg #(.bit(10)) Q_reg (clk, sclr, ld_Q, Q_next, Q);
+    Reg #(.bit(10)) B_reg (clk, sclr, ld_B, in_B, B);
 
     // Counter
     Counter counter (clk, sclr, increace_counter, ld_counter,
                      `par_in_counter, co_counter, count_out);
     
     //MUX
-    MUX #(11) ACC_MUX (select_ACC, 11'b0, ACC_in, ACC_sub, ACC_else, ACC_next);
-    MUX #(10) Q_MUX (select_Q, 10'b0, Q_in, Q_sub, Q_else, Q_next);
+    MUX #(.bit(11)) ACC_MUX (select_ACC, 11'b0, ACC_in, ACC_sub, ACC_else, ACC_next);
+    MUX #(.bit(10)) Q_MUX (select_Q, 10'b0, Q_in, Q_sub, Q_else, Q_next);
 
     // Sub
     Subtractor subtractor (ACC, {1'b0, B}, sub_out);
