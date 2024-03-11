@@ -1,6 +1,6 @@
 // TODO fix value
-`define par_in_counter 4'd3
-`define counter_if_value 4'd9
+`define par_in_counter 4'd1
+`define counter_if_value 4'd10
 module Data_path (
     input clk,
     input sclr,
@@ -17,13 +17,15 @@ module Data_path (
     output ovf,
     output co_counter,
     output be,
-    output [9:0] q_out
+    output [9:0] Q_out
 );
     wire [10:0] ACC, ACC_next, ACC_in, ACC_sub, ACC_else;
     wire [9:0] Q, Q_next, Q_in, Q_sub, Q_else;
     wire [10:0] sub_out;
     wire [9:0] B;
     wire [3:0] count_out;
+
+    assign Q_out = Q;
 
     assign {ACC_in, Q_in} = {10'b0, in_A, 1'b0};
 
@@ -48,11 +50,11 @@ module Data_path (
     Subtractor subtractor (ACC, {1'b0, B}, sub_out);
 
     // Comparator
-    Comparator_be cmp (ACC, {1'b0, Q}, be);
+    Comparator_be cmp (ACC, {1'b0, B}, be);
 
     //Gates
-    assign ovf = (|Q_next) | (~|(`counter_if_value ^ count_out));
-    assign dvz = ~|B;
+    assign ovf = (|Q_next[9:4]) & (~(|(`counter_if_value ^ count_out)));
+    assign dvz = ~|in_B;
 endmodule
 
 module Reg #(parameter bit = 10) (

@@ -4,16 +4,31 @@ module main(
         input start,
         input clk,
         input sclr,
-
-        output [9:0]qout,
         input dvz,
         input ovf,
         input busy,
-        input valid);
-    wire co,be,inc_counter,ld_Q,ld_ACC,ld_B,ld_counter,dp_ovf;
+        input valid,
+        output [9:0]qout
+        );
+    wire co,be,inc_counter,ld_Q,ld_ACC,ld_B,ld_counter,dp_ovf,dp_dvz;
     wire [1:0] select;
-    controller CONTROLLER(start,dvz,dp_ovf,co,clk,sclr,be,valid,inc_counter,
-                        ld_Q,ld_ACC,ld_B,ld_counter,select,busy,ovf);
+    controller CONTROLLER(start,
+                          dp_dvz,
+                          dp_ovf,
+                          co,
+                          clk,
+                          sclr,
+                          be,
+                          valid,
+                          inc_counter,
+                          ld_Q,
+                          ld_ACC,
+                          ld_B,
+                          ld_counter,
+                          select,
+                          busy,
+                          ovf,
+                          dvz);
     Data_path DATA_PATH(clk,
                         sclr,
                         in_a,
@@ -25,7 +40,7 @@ module main(
                         ld_ACC,
                         select,
                         select,
-                        dvz,
+                        dp_dvz,
                         dp_ovf,
                         co,
                         be,
