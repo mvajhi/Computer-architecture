@@ -34,15 +34,15 @@ module Data_path (
     // Reg
     Reg #(11) ACC_reg (clk, sclr, ld_ACC, ACC_next, ACC);
     Reg #(10) Q_reg (clk, sclr, ld_Q, Q_next, Q);
-    Reg #(10) Q_reg (clk, sclr, ld_B, in_B, B);
+    Reg #(10) B_reg (clk, sclr, ld_B, in_B, B);
 
     // Counter
     Counter counter (clk, sclr, increace_counter, ld_counter,
-                     par_in_counter, co_counter, count_out);
+                     `par_in_counter, co_counter, count_out);
     
     //MUX
-    MUX #(11) ACC_MUX (select_ACC, {11'b0, ACC_in, ACC_sub, ACC_else}, ACC_next);
-    MUX #(10) Q_MUX (select_Q, {10'b0, Q_in, Q_sub, Q_else}, Q_next);
+    MUX #(11) ACC_MUX (select_ACC, 11'b0, ACC_in, ACC_sub, ACC_else, ACC_next);
+    MUX #(10) Q_MUX (select_Q, 10'b0, Q_in, Q_sub, Q_else, Q_next);
 
     // Sub
     Subtractor subtractor (ACC, {1'b0, B}, sub_out);
@@ -51,11 +51,11 @@ module Data_path (
     Comparator_be cmp (ACC, {1'b0, Q}, be);
 
     //Gates
-    assign ovf = (|Q_next) | (~|(counter_if_value ^ count_out));
+    assign ovf = (|Q_next) | (~|(`counter_if_value ^ count_out));
     assign dvz = ~|B;
 endmodule
 
-module #(parameter bit = 10) Reg (
+module Reg #(parameter bit = 10) (
     input clk,
     input rst,
     input ld,
@@ -64,7 +64,7 @@ module #(parameter bit = 10) Reg (
 );
     always @(posedge clk) begin
         if (rst == 1'b1)
-            par_out <= bit'b0;
+            par_out <= 0;
         else if (ld == 1'b1)
             par_out <= par_in;
     end
@@ -91,15 +91,18 @@ module Counter (
     assign co = &par_out;
 endmodule
 
-module #(parameter bit = 10) MUX (
+module MUX #(parameter bit = 10) (
     input [1:0] select,
-    input [bit - 1:0] inp [3:0],
-    output [bit - 1:0] out
+    input [bit-1:0] inp_0,
+    input [bit-1:0] inp_1,
+    input [bit-1:0] inp_2,
+    input [bit-1:0] inp_3,
+    output [bit-1:0] out
 );
-    assign out = (select == 2'b00) ? inp[0]: 
-                 (select == 2'b01) ? inp[1]: 
-                 (select == 2'b10) ? inp[2]: 
-                 (select == 2'b11) ? inp[3]: bit'bx;
+    assign out = (select == 2'b00) ? inp_0: 
+                 (select == 2'b01) ? inp_1: 
+                 (select == 2'b10) ? inp_2: 
+                 (select == 2'b11) ? inp_3: {bit{1'bx}};
 endmodule
 
 module Subtractor (
@@ -112,8 +115,8 @@ endmodule
 
 module Comparator_be (
     input [10:0] big,
-    input [10:0] small,
+    input [10:0] Small,
     output out
 );
-    assign out = big >= small;
+    assign out = big >= Small;
 endmodule

@@ -48,8 +48,8 @@ module controller (input start,dvz,dp_ovf,co,clk,rst,be,output reg valid,inc_cou
             UPDATE_ACC_AND_Q :  
                 begin
                     ld_Q = 1'b1;
-                    ld_ACC 1'b1;
-                    select = (be=1) ? 2'd2 : 2'd3;
+                    ld_ACC = 1'b1;
+                    select = (be==1) ? 2'd2 : 2'd3;
                     ovf = dp_ovf;
                 end
             SET_OUTPUT :

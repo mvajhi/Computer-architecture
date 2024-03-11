@@ -10,6 +10,7 @@ module tb();
     wire ovf;
     wire busy;
     wire valid;
+    main MAIN(a_in,b_in,start,clk,sclr,q_out,dvz,ovf,busy,valid);
     always #10 clk = ~clk;
     initial begin
         #10 start=1'b1;
