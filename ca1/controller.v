@@ -1,4 +1,20 @@
-module controller (input start,dvz,dp_ovf,co,clk,rst,be,output reg valid,inc_counter,ld_Q,ld_ACC,ld_B, ld_counter, [1:0]select, busy,ovf);
+module controller (input start,
+                input dvz,
+                input dp_ovf,
+                input co,
+                input clk,
+                input rst,
+                input be,
+                output reg valid,
+                output reg inc_counter,
+                output reg ld_Q,
+                output reg ld_ACC,
+                output reg ld_B,
+                output reg ld_counter,
+                output reg  [1:0]select,
+                output reg  busy,
+                output reg ovf
+                );
     parameter IDLE = 3'd0 , LOAD = 3'd1 , FOR = 3'd2 , UPDATE_ACC_AND_Q = 3'd3,SET_OUTPUT = 3'd4;
     reg [3:0] ps;
     reg [3:0] ns;
