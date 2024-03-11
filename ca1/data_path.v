@@ -1,6 +1,5 @@
-// TODO fix value
 `define par_in_counter 4'd1
-`define counter_if_value 4'd10
+`define counter_if_value 4'd11
 module Data_path (
     input clk,
     input sclr,

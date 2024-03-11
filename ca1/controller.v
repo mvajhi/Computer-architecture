@@ -20,12 +20,14 @@ module controller (input start,
     reg [2:0] ps;
     reg [2:0] ns;
 
+    // sequential part
     always @(posedge clk) begin
         if(rst == 1'b1) 
             ps <= 3'b0;
         else ps <= ns;
     end
 
+    // combinational part (next state)
     always @(start,dp_dvz,dp_ovf,co,ps) begin
         ns = IDLE;
         case(ps)
@@ -38,6 +40,7 @@ module controller (input start,
         endcase
     end
 
+    // combinational part (primary output)
     always @(start,dp_dvz,dp_ovf,co,ps) begin
         valid = 1'b0;
         inc_counter = 1'b0;

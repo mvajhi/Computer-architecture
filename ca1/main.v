@@ -12,6 +12,7 @@ module main(
         );
     wire co,be,inc_counter,ld_Q,ld_ACC,ld_B,ld_counter,dp_ovf,dp_dvz;
     wire [1:0] select;
+
     controller CONTROLLER(start,
                           dp_dvz,
                           dp_ovf,
@@ -29,6 +30,7 @@ module main(
                           busy,
                           ovf,
                           dvz);
+
     Data_path DATA_PATH(clk,
                         sclr,
                         in_a,
