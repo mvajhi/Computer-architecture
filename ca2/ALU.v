@@ -11,7 +11,8 @@ module ALU (
             3'b001: ALUResult = A - B;
             3'b010: ALUResult = A & B;
             3'b011: ALUResult = A | B;
-            3'b100: ALUResult = A < B;
+            3'b100: ALUResult = A < B ? 32'hff : 32'h00;
+            3'b101: ALUResult = A < B;
         endcase
     end
     assign Zero = (ALUResult == 0);
