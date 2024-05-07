@@ -1,6 +1,6 @@
 module memory(
     input [31:0] A,
-    input WD,
+    input [31:0]WD,
     input clk, rst, We,
     output reg [31:0] RD
 );
