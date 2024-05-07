@@ -13,6 +13,7 @@ module ALU (
             3'b011: ALUResult = A | B;
             3'b100: ALUResult = A < B;
             3'b101: ALUResult = $unsigned(A) < $unsigned(B);
+            3'b110: ALUResult = A ^ B;
         endcase
     end
     assign Zero = (ALUResult == 0);
