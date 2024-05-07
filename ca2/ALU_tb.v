@@ -37,9 +37,15 @@ module ALU_tb();
 
         #10;
 
-        A = 10;
+        A = -10;
         B = 15;
         ALUOp = 3'b100; // Less than operation
+
+        #10;
+
+        A = -10;
+        B = 15;
+        ALUOp = 3'b101; // Less than operation
 
         #10;
 
