@@ -2,7 +2,7 @@ module data_path(
     input clk,
     input rst,
     input [1:0]pcsel,
-    input regsel,
+    input [1:0]regsel,
     input [2:0]extend_func,
     input wereg,
     input wedata,
@@ -109,7 +109,7 @@ multiplexer_4to1 pc_choice(pcsel,choice0,choice1,choice2,choice3,pcin);
 //    input wire [31:0]D1, 
 //    output wire [31:0]Y 
 //);
-multiplexer_2to1 WD_select(regsel,write_data,choice0,WD);
+multiplexer_4to1 WD_select(regsel,write_data,choice0,extended_data,32'b0,WD);
 assign ZERO=zero;
 assign neg = alu_res[31];
 endmodule
