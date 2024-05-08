@@ -15,101 +15,43 @@ module data_path(
     output ZERO,
     output neg
 );
-wire [31:0]pcin,pcout;
-//module PC (
-//    input clk,
-//    input rst,
-//    input [31:0] data_in,
-//    output reg [31:0] data_out
-//);
-PC  pc(clk,rst,pcin,pcout);
-wire [31:0]instruction;
-//module inst_mem(
-//    input [31:0] A,
-//    output reg [31:0] RD
-//);
-inst_mem instruction_memmory(pcout,instruction);
-assign op = instruction[6:0];
-assign func3 = instruction[14:12];
-assign func7 = instruction[31:25];
-//module imm_extend(
-//    input [24:0]unextend_data,
-//    input [2:0]extend_func,
-//    output reg [31:0]extended_data
-//
-//);
-wire [31:0]extended_imm; 
-imm_extend immediate_extened(instruction[31:7],extend_func,extended_imm);
-wire [31:0]WD,RD1,RD2;
-//module file_reg(
-//    input clk,
-//    input rst,
-//    input [4:0] A1, A2, A3,
-//    input [31:0] WD,
-//    input We,
-//    output [31:0] RD1, RD2
-//);
-file_reg file_register(clk,rst,instruction[19:15],instruction[24:20],instruction[11:7],WD,wereg,RD1,RD2);
-wire [31:0]ALUB;
-//module multiplexer_2to1 (
-//    input wire S, 
-//    input wire [31:0]D0, 
-//    input wire [31:0]D1, 
-//    output wire [31:0]Y 
-//);
-multiplexer_2to1 bselect(aluselb,RD2,extended_imm,ALUB);
-wire [31:0]alu_res;
-wire zero;
-//module ALU (
-//    input signed [31:0] A,
-//    input signed [31:0] B,
-//    input [2:0] ALUOp,
-//    output reg [31:0] ALUResult,
-//    output reg Zero
-//);
-ALU alu(RD1,ALUB,aluop,alu_res,zero);
-wire [31:0]memmory_out;
-//module memory(
-//    input [31:0] A,
-//    input [31:0]WD,
-//    input clk, rst, We,
-//    output reg [31:0] RD
-//);
-memory MEMMORY(alu_res,RD2,clk,rst,wedata,memmory_out);
-wire [31:0]write_data;
-//module multiplexer_2to1 (
-//    input wire S, 
-//    input wire [31:0]D0, 
-//    input wire [31:0]D1, 
-//    output wire [31:0]Y 
-//);
-multiplexer_2to1 write_data_select(outsel,alu_res,memmory_out,write_data);
-wire [31:0]choice0,choice1,choice2,choice3;
-adder choice0_ADDER(32'h00000004,pcout,choice0);
-assign choice2 = write_data;
-assign choice3 = extended_imm;
-//module adder(
-//    input [31:0] A,
-//    input [31:0] B,
-//    output [31:0] C
-//);
-adder choice1_ADDER(pcout,extended_imm,choice1);
-//module multiplexer_4to1 (
-//    input [1:0] S, 
-//    input [31:0] D0,
-//    input [31:0] D1,
-//    input [31:0] D2,
-//    input [31:0] D3, 
-//    output [31:0]Y 
-//);
-multiplexer_4to1 pc_choice(pcsel,choice0,choice1,choice2,choice3,pcin);
-//module multiplexer_2to1 (
-//    input wire S, 
-//    input wire [31:0]D0, 
-//    input wire [31:0]D1, 
-//    output wire [31:0]Y 
-//);
-multiplexer_4to1 WD_select(regsel,write_data,choice0,extended_data,32'b0,WD);
-assign ZERO=zero;
-assign neg = alu_res[31];
+    wire [31:0] pcin,pcout;
+    wire [31:0] instruction;
+    wire [31:0] extended_imm; 
+    wire [31:0] WD,RD1,RD2;
+    wire [31:0] ALUB;
+    wire [31:0] alu_res;
+    wire [31:0] memmory_out;
+    wire [31:0] write_data;
+    wire [31:0] choice0,choice1,choice2,choice3;
+    wire zero;
+
+    PC  pc(clk,rst,pcin,pcout);
+
+    inst_mem instruction_memmory(pcout,instruction);
+    assign op = instruction[6:0];
+    assign func3 = instruction[14:12];
+    assign func7 = instruction[31:25];
+
+    imm_extend immediate_extened(instruction[31:7],extend_func,extended_imm);
+
+    file_reg file_register(clk,rst,instruction[19:15],instruction[24:20],instruction[11:7],WD,wereg,RD1,RD2);
+    
+    multiplexer_2to1 bselect(aluselb,RD2,extended_imm,ALUB);
+    
+    ALU alu(RD1,ALUB,aluop,alu_res,zero);
+    
+    memory MEMMORY(alu_res,RD2,clk,rst,wedata,memmory_out);
+    
+    multiplexer_2to1 write_data_select(outsel,alu_res,memmory_out,write_data);
+    
+    adder choice0_ADDER(32'h00000004,pcout,choice0);
+    assign choice2 = write_data;
+    assign choice3 = extended_imm;
+    adder choice1_ADDER(pcout,extended_imm,choice1);
+    multiplexer_4to1 pc_choice(pcsel,choice0,choice1,choice2,choice3,pcin);
+    multiplexer_4to1 WD_select(regsel,write_data,choice0,extended_data,32'b0,WD);
+    
+    assign ZERO=zero;
+    assign neg = alu_res[31];
 endmodule
