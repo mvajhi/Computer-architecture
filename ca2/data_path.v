@@ -23,12 +23,15 @@ wire [31:0]pcin,pcout;
 //    output reg [31:0] data_out
 //);
 PC  pc(clk,rst,pcin,pcout);
-wire [32:0]instruction;
+wire [31:0]instruction;
 //module inst_mem(
 //    input [31:0] A,
 //    output reg [31:0] RD
 //);
 inst_mem instruction_memmory(pcout,instruction);
+assign op = instruction[6:0];
+assign func3 = instruction[14:12];
+assign func7 = instruction[31:25];
 //module imm_extend(
 //    input [24:0]unextend_data,
 //    input [2:0]extend_func,
@@ -64,7 +67,7 @@ wire zero;
 //    output reg [31:0] ALUResult,
 //    output reg Zero
 //);
-ALU alu(RD1,ALUB,aluop,alures,zero);
+ALU alu(RD1,ALUB,aluop,alu_res,zero);
 wire [31:0]memmory_out;
 //module memory(
 //    input [31:0] A,
@@ -90,7 +93,7 @@ assign choice3 = extended_imm;
 //    input [31:0] B,
 //    output [31:0] C
 //);
-adder choice1_ADDER(pcout,extended_data,choice1);
+adder choice1_ADDER(pcout,extended_imm,choice1);
 //module multiplexer_4to1 (
 //    input [1:0] S, 
 //    input [31:0] D0,

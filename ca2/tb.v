@@ -1,5 +1,5 @@
 module tb();
-    reg clk;
+    reg clk = 1'b0;
     reg rst;
 
     processor dut (
@@ -7,10 +7,11 @@ module tb();
         .rst(rst)
     );
 
-    always #5 clk = ~clk;
+    always #10 clk = ~clk;
 
     initial begin
         rst = 1;
         #10 rst = 0;
+        #10000 $finish;
     end
 endmodule
