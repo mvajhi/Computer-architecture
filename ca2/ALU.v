@@ -5,15 +5,22 @@ module ALU (
     output reg [31:0] ALUResult,
     output reg Zero
 );
+    parameter op_add  = 3'b000;
+    parameter op_sub  = 3'b001;
+    parameter op_and  = 3'b010;
+    parameter op_or   = 3'b011;
+    parameter op_slt  = 3'b100;
+    parameter op_sltu = 3'b101;
+    parameter op_xor  = 3'b110;
     always @(*) begin
         case(ALUOp)
-            3'b000: ALUResult = A + B;
-            3'b001: ALUResult = A - B;
-            3'b010: ALUResult = A & B;
-            3'b011: ALUResult = A | B;
-            3'b100: ALUResult = A < B;
-            3'b101: ALUResult = $unsigned(A) < $unsigned(B);
-            3'b110: ALUResult = A ^ B;
+            op_add: ALUResult = A + B;
+            op_sub: ALUResult = A - B;
+            op_and: ALUResult = A & B;
+            op_or: ALUResult = A | B;
+            op_slt: ALUResult = A < B;
+            op_sltu: ALUResult = $unsigned(A) < $unsigned(B);
+            op_xor: ALUResult = A ^ B;
         endcase
     end
     assign Zero = (ALUResult == 0);
