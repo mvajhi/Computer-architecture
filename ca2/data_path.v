@@ -63,5 +63,48 @@ wire zero;
 //    output reg Zero
 //);
 ALU alu(RD1,ALUB,aluop,alures,zero);
+wire [31:0]memmory_out;
+//module memory(
+//    input [31:0] A,
+//    input [31:0]WD,
+//    input clk, rst, We,
+//    output reg [31:0] RD
+//);
+memory MEMMORY(alu_res,RD2,clk,rst,wedata,memmory_out);
+wire [31:0]write_data;
+//module multiplexer_2to1 (
+//    input wire S, 
+//    input wire [31:0]D0, 
+//    input wire [31:0]D1, 
+//    output wire [31:0]Y 
+//);
+multiplexer_2to1 write_data_select(outsel,alu_res,memmory_out,write_data);
+wire [31:0]choice0,choice1,choice2,choice3;
+adder choice0_ADDER(32'h00000004,pcout,choice0);
+assign choice2 = write_data;
+assign choice3 = extended_imm;
+//module adder(
+//    input [31:0] A,
+//    input [31:0] B,
+//    output [31:0] C
+//);
+adder choice1_ADDER(pcout,extended_data,choice1);
+//module multiplexer_4to1 (
+//    input [1:0] S, 
+//    input [31:0] D0,
+//    input [31:0] D1,
+//    input [31:0] D2,
+//    input [31:0] D3, 
+//    output [31:0]Y 
+//);
+multiplexer_4to1 pc_choice(pcsel,choice0,choice1,choice2,choice3,pcin);
+//module multiplexer_2to1 (
+//    input wire S, 
+//    input wire [31:0]D0, 
+//    input wire [31:0]D1, 
+//    output wire [31:0]Y 
+//);
+multiplexer_2to1 WD_select(regsel,write_data,choice0,WD);
+
 
 endmodule
