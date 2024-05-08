@@ -6,5 +6,7 @@ module inst_mem(
     initial begin
         $readmemb("inst.mem", mem);
     end
+    wire [31:0] addr;
+    assign addr = A[31:2];
     assign RD = mem[A[31:2]];
 endmodule

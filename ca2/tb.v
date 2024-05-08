@@ -12,6 +12,6 @@ module tb();
     initial begin
         rst = 1;
         #10 rst = 0;
-        #140 $finish;
+        #10000 $finish;
     end
 endmodule

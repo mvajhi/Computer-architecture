@@ -16,7 +16,7 @@ always @(*)
             I_type: extended_data = {{20{unextend_data[24]}}, unextend_data[24:13]};
             S_type: extended_data = {{20{unextend_data[24]}}, unextend_data[24:18], unextend_data[4:0]};
             B_type: extended_data = {{20{unextend_data[24]}}, unextend_data[0], unextend_data[23:18], unextend_data[4:1], 1'b0};
-            J_type: extended_data = {{12{unextend_data[24]}}, unextend_data[12:5], unextend_data[13], unextend_data[23:14]};
+            J_type: extended_data = {{12{unextend_data[24]}}, unextend_data[12:5], unextend_data[13], unextend_data[23:14], 1'b0};
             U_type: extended_data = {unextend_data[24:5], {12{1'b0}}};
         endcase
 end
