@@ -11,7 +11,8 @@ module data_path(
     input outsel,
     output [6:0]op,
     output [2:0]func3,
-    output [6:0]func7
+    output [6:0]func7,
+    output ZERO
 );
 wire [31:0]pcin,pcout;
 //module PC (
@@ -105,6 +106,6 @@ multiplexer_4to1 pc_choice(pcsel,choice0,choice1,choice2,choice3,pcin);
 //    output wire [31:0]Y 
 //);
 multiplexer_2to1 WD_select(regsel,write_data,choice0,WD);
-
+assign ZERO=zero;
 
 endmodule
