@@ -7,7 +7,7 @@ module controller (
     input zero,
     input negetive,
     output reg [1:0]pcsel,
-    output reg regsel,
+    output reg [1:0] regsel,
     output reg [2:0]extend_func,
     output reg wereg,
     output reg wedata,
@@ -17,7 +17,9 @@ module controller (
 );
     // op code
     parameter R_type = 7'b0110011;
-    parameter I_type = 7'b0000011;
+    parameter I_type = 7'b0010011;
+    parameter I_type_load = 7'b0000011;
+    parameter I_type_jump = 7'b1100111;
     parameter S_type = 7'b0100011;
     parameter B_type = 7'b1100011;
     parameter J_type = 7'b1101111;
@@ -151,18 +153,11 @@ module controller (
                     func3_I_type_xori: aluop = op_xor;
                     func3_I_type_ori: aluop = op_or;
                     func3_I_type_andi: aluop = op_and;
+                endcase
+            end
 
-                    func3_I_type_jalr: begin
-                        pcsel = jarl_pc;
-                        regsel = reg_sel_pc;
-                        extend_func = extend_I_type;
-                        wereg = 1'b1;
-                        wedata = 1'b0;
-                        aluselb = alu_b_imm;
-                        outsel = out_sel_alu;
-                        aluop = op_add;
-                    end
-
+            I_type_load: begin
+                case(func3)
                     func3_I_type_lw: begin
                         pcsel = next_pc;
                         regsel = reg_sel_data;
@@ -171,6 +166,21 @@ module controller (
                         wedata = 1'b0;
                         aluselb = alu_b_imm;
                         outsel = out_sel_mem;
+                        aluop = op_add;
+                    end
+                endcase
+            end
+
+            I_type_jump: begin
+                case(func3)
+                    func3_I_type_jalr: begin
+                        pcsel = jarl_pc;
+                        regsel = reg_sel_pc;
+                        extend_func = extend_I_type;
+                        wereg = 1'b1;
+                        wedata = 1'b0;
+                        aluselb = alu_b_imm;
+                        outsel = out_sel_alu;
                         aluop = op_add;
                     end
                 endcase
