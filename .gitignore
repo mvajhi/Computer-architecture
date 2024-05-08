@@ -40,7 +40,6 @@ modlesim_files
 *.hex
 *.html
 *.jdi
-*.jpg
 # *.mif
 *.pin
 *.pof
