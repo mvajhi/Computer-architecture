@@ -8,5 +8,11 @@ module memory(
     initial begin
         $readmemb("data.mem", mem);
     end
+
+    always @(posedge clk) begin
+        if (We) begin
+            mem[A] <= WD;
+        end
+    end
     assign RD = mem[A[31:2]];
 endmodule
