@@ -7,7 +7,7 @@ module controller (
     input zero,
     input negetive,
     output reg [1:0]pcsel,
-    output reg regsel,
+    output reg [1:0] regsel,
     output reg [2:0]extend_func,
     output reg wereg,
     output reg wedata,

@@ -5,7 +5,7 @@ module processor(input clk, rst);
     wire zero;
     wire negetive;
     wire [1:0]pcsel;
-    wire regsel;
+    wire [1:0]regsel;
     wire [2:0]extend_func;
     wire wereg;
     wire wedata;
