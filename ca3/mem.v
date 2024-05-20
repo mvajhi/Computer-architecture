@@ -6,7 +6,7 @@ module memory(
 );
     reg [31:0] mem [0:20];
     initial begin
-        $readmemb("data.mem", mem);
+        $readmemb("memmory.mem", mem);
     end
 
     always @(posedge clk) begin
