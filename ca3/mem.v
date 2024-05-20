@@ -4,7 +4,7 @@ module memory(
     input clk, rst, We,
     output reg [31:0] RD
 );
-    reg [31:0] mem [0:20];
+    reg [31:0] mem [0:30];
     initial begin
         $readmemb("memmory.mem", mem);
     end

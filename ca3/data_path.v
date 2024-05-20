@@ -55,19 +55,7 @@ wire [31:0]memmoryout;
 //     input clk, rst, We,
 //     output reg [31:0] RD
 // );
-//     reg [31:0] mem [0:20];
-//     initial begin
-//         $readmemb("data.mem", mem);
-//     end
-
-//     always @(posedge clk) begin
-//         if (We) begin
-//             mem[A] <= WD;
-//         end
-//     end
-//     assign RD = mem[A[31:2]];
-// endmodule
-memmory Memmory(memadr,B,memwrite,memmoryout);
+memory Memmory(memadr,B,clk,rst,memwrite,memmoryout);
 wire [31:0]instruction;
 wire [31:0] oldpc;
 wire [31:0]memmorydataregister;
@@ -78,15 +66,6 @@ wire [31:0]memmorydataregister;
 //     input enable,
 //     output reg [31:0] data_out
 // );
-
-//     always @(posedge clk or posedge rst) begin
-//         if (rst)
-//             data_out <= 32'b0;
-//         else if(enable)
-//             data_out <= data_in;
-//     end
-
-// endmodule
 register IR(clk,rst,memmoryout,irwrite,instruction);
 register OLDPC(clk,rst,pcout,irwrite,oldpc);
 register MDR(clk,rst,memmoryout,1'b1,memmorydataregister);
@@ -170,28 +149,7 @@ wire [31:0]registeredaluresult;
 //     output reg Zero,
 //     output reg Neg
 // );
-//     parameter op_add  = 3'b000;
-//     parameter op_sub  = 3'b001;
-//     parameter op_and  = 3'b010;
-//     parameter op_or   = 3'b011;
-//     parameter op_slt  = 3'b100;
-//     parameter op_sltu = 3'b101;
-//     parameter op_xor  = 3'b110;
-//     always @(*) begin
-//         case(ALUOp)
-//             op_add: ALUResult = A + B;
-//             op_sub: ALUResult = A - B;
-//             op_and: ALUResult = A & B;
-//             op_or: ALUResult = A | B;
-//             op_slt: ALUResult = A < B;
-//             op_sltu: ALUResult = $unsigned(A) < $unsigned(B);
-//             op_xor: ALUResult = A ^ B;
-//         endcase
-//     end
-//     assign Zero = (ALUResult == 0);
-//     assign Neg =  ALUResult[31];
-// endmodule
 ALU alu(aluopranda,aluoprandb,aluop,aluresult,zer,neg);
 register aluout(clk,rst,aluresult,1'b1,registeredaluresult);
-multiplexer_4to1 resultselect(resultsrc,registeredaluresult,aluresult,memmorydataregister,extended_data,,resultdata);
+multiplexer_4to1 resultselect(resultsrc,registeredaluresult,aluresult,memmorydataregister,extended_data,resultdata);
 endmodule
