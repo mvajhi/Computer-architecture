@@ -111,7 +111,7 @@ module controller (
     parameter adr_result = 1'b1;
 
     reg [4:0] ps; 
-    wire [4:0] ns; 
+    reg [4:0] ns; 
     parameter IF = 5'b00000,
               ID = 5'b00001,
               EX_R_TYPE = 5'b00010,
@@ -119,7 +119,7 @@ module controller (
               EX_SW = 5'b00100,
               EX_LW = 5'b00101,
               EX_1_JAL = 5'b00110,
-              EX_2_JAl = 5'b00111,
+              EX_2_JAL = 5'b00111,
               EX_1_JALR = 5'b01000,
               EX_2_JALR = 5'b01001,
               EX_B_TYPE = 5'b01010,
@@ -141,7 +141,7 @@ module controller (
     end
 
     always @(*) begin
-        ns = 32'b0;
+        ns = 5'b0;
         case(ps)
             IF: ns = ID;
             ID: case(op)
@@ -152,7 +152,7 @@ module controller (
                     S_type: ns = EX_SW;
                     B_type: ns = EX_B_TYPE;
                     J_type: ns = EX_1_JAL;
-                    U_type: ns = EX_U_TYPE;
+                    U_type: ns = REG_U_TYPE;
                     default: ns = IF;
                 endcase
             EX_R_TYPE: ns = REG_R_TYPE;
@@ -168,7 +168,7 @@ module controller (
     end
 
     always @(*) begin
-        {pc_en, adr_src, mem_write, IR_write, reg_write, alusela, aluselb, aluop, result_src, imm_src} = 17'b0;
+        {pc_en, adr_src, mem_write, IR_write, reg_write, alusrcA, alusrcB, aluop, result_src, imm_src} = 17'b0;
         case(ps)
             IF: begin
                 pc_en = 1'b1;
