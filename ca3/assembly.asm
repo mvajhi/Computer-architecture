@@ -1,7 +1,7 @@
 addi s7,zero,40
 add s1,zero,zero
 add s2,zero,zero
-add s3,zero,zero
+addi s3,zero,52
 Loop:add s6,s2,s3
 lw s4,s6(0)
 bge s2,s7,END
