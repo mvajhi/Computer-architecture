@@ -16,7 +16,8 @@ module file_reg(
                 Reg_file[i] <= 32'b0;
             end
         end else if (We) begin
-            Reg_file[A3] <= WD;
+            if (A3 != 5'b0)
+                Reg_file[A3] <= WD;
         end
     end
     assign RD1 = Reg_file[A1];

@@ -50,7 +50,7 @@ module data_path(
     assign choice3 = extended_imm;
     adder choice1_ADDER(pcout,extended_imm,choice1);
     multiplexer_4to1 pc_choice(pcsel,choice0,choice1,choice2,choice3,pcin);
-    multiplexer_4to1 WD_select(regsel,write_data,choice0,extended_data,32'b0,WD);
+    multiplexer_4to1 WD_select(regsel,write_data,choice0,extended_imm,32'b0,WD);
     
     assign ZERO=zero;
     assign neg = alu_res[31];
