@@ -152,4 +152,7 @@ wire [31:0]registeredaluresult;
 ALU alu(aluopranda,aluoprandb,aluop,aluresult,zer,neg);
 register aluout(clk,rst,aluresult,1'b1,registeredaluresult);
 multiplexer_4to1 resultselect(resultsrc,registeredaluresult,aluresult,memmorydataregister,extended_data,resultdata);
+assign opcode = instruction[6:0];
+assign func3 = instruction[14:12];
+assign func7 = instruction[31:25];
 endmodule
