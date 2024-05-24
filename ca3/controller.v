@@ -222,11 +222,16 @@ module controller (
                 result_src = result_alu_reg;
                 alusrcA = alu_a_reg;
                 alusrcB = alu_b_reg;
+                aluop = op_sub;
                 case(func3)
                     func3_B_type_beq: pc_en = zero ? 1 : 0;
                     func3_B_type_bne: pc_en = zero ? 0 : 1;
-                    func3_B_type_blt: pc_en = negetive ? 0 : 1;
-                    func3_B_type_bge: pc_en = negetive ? 1 : 0;
+                    func3_B_type_blt: pc_en = negetive ? 1 : 0;
+                    func3_B_type_bge: pc_en = negetive ? 0 : 1;
+                    // rs1 - rs2
+                    // rs1 < rs2 > neg = 1
+                    // rs1 >= rs2 > neg = 0 bge
+                    // s2 >= s7 -> s2 -s7 >= 0 -> neg = 0
                 endcase
             end
             EX_SW: begin
@@ -242,7 +247,7 @@ module controller (
                 imm_src = imm_I_type;
             end
             EX_1_JAL: begin
-                alusrcA = alu_a_pc;
+                alusrcA = alu_a_old_pc;
                 alusrcB = alu_b_imm;
                 aluop = op_add;
                 imm_src = imm_J_type;
