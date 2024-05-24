@@ -163,6 +163,7 @@ module controller (
             EX_2_JAL: ns = REG_JAL;
             EX_1_JALR: ns = EX_2_JALR;
             EX_2_JALR: ns = REG_JALR;
+            MEM_LW: ns = REG_LW;
             default: ns = IF;
         endcase
     end
@@ -215,6 +216,17 @@ module controller (
                     func3_I_type_xori: aluop = op_xor;
                     func3_I_type_ori: aluop = op_or;
                     func3_I_type_andi: aluop = op_and;
+                endcase
+            end
+            EX_B_TYPE: begin
+                result_src = result_alu_reg;
+                alusrcA = alu_a_reg;
+                alusrcB = alu_b_reg;
+                case(func3)
+                    func3_B_type_beq: pc_en = zero ? 1 : 0;
+                    func3_B_type_bne: pc_en = zero ? 0 : 1;
+                    func3_B_type_blt: pc_en = negetive ? 0 : 1;
+                    func3_B_type_bge: pc_en = negetive ? 1 : 0;
                 endcase
             end
             EX_SW: begin

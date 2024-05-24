@@ -14,5 +14,7 @@ module memory(
             mem[A] <= WD;
         end
     end
+    wire [31:0] addr;
+    assign addr = A[31:2];
     assign RD = mem[A[31:2]];
 endmodule

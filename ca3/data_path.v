@@ -36,7 +36,6 @@ wire [31:0]pcout;
 //
 //endmodule
 PC pc(clk,rst,resultdata,pcen,pcout);
-wire [31:0]aluoutdata;
 wire [31:0] memadr;
 // module multiplexer_2to1 (
 //     input wire S, 
@@ -46,7 +45,7 @@ wire [31:0] memadr;
 // );
 //     assign Y = (S == 1'b0) ? D0 : D1;
 // endmodule
-multiplexer_2to1 memadrselect(adrsrc,pcout,aluoutdata,memadr);
+multiplexer_2to1 memadrselect(adrsrc,pcout,resultdata,memadr);
 wire [31:0]B;
 wire [31:0]memmoryout;
 // module memory(
