@@ -148,7 +148,7 @@ module controller (
                     R_type: ns = EX_R_TYPE;
                     I_type_alu: ns = EX_I_TYPE;
                     I_type_load: ns = EX_LW;
-                    I_type_jump: ns = EX_1_JAL;
+                    I_type_jump: ns = EX_1_JALR;
                     S_type: ns = EX_SW;
                     B_type: ns = EX_B_TYPE;
                     J_type: ns = EX_1_JAL;
@@ -300,7 +300,7 @@ module controller (
             end
             REG_JAL: begin
                 reg_write = 1'b1;
-                result_src = result_mdr;
+                result_src = result_alu_reg;
             end
             REG_JALR: begin
                 reg_write = 1'b1;
