@@ -1,16 +1,14 @@
-module register (
+module register #(parameter bit = 32) (
     input clk,
     input rst,
-    input [31:0] data_in,
-    input enable,
-    output reg [31:0] data_out
+    input ld,
+    input [bit - 1:0] par_in,
+    output reg [bit - 1:0] par_out
 );
-
-    always @(posedge clk or posedge rst) begin
-        if (rst)
-            data_out <= 32'b0;
-        else if(enable)
-            data_out <= data_in;
+    always @(posedge clk) begin
+        if (rst == 1'b1)
+            par_out <= 0;
+        else if (ld == 1'b1)
+            par_out <= par_in;
     end
-
 endmodule
