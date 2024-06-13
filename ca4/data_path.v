@@ -112,6 +112,14 @@ module data_path (
         .C(PCTragetE)
     );
 
+    logic PCSelector(
+        .Zero(Zero),
+        .Neg(Neg),
+        .Jump(JumpE),
+        .Branch(BranchE),
+        .PCSrc(PCSrcE)
+    );
+
     assign WriteDataE = RegBE;
 
     register #(.bit(/*TODO*/)) reg_E_M(
