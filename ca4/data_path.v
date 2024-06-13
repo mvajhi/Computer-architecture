@@ -1,6 +1,74 @@
 module data_path (
-    ports
+    input clk,
+    input rst,
+
+    // controller
+    input RegWriteD,
+    input [1:0] ResultSrcD,
+    input MemWriteD,
+    input [1:0] JumpD,
+    input [2:0] BranchD,
+    input [2:0] ALUControlD,
+    input ALUSrcD,
+    input [2:0] ImmSrcD,
+    output [6:0] op,
+    output [2:0] func3,
+    output [6:0] func7,
+
+    // hazard_unit
+    input StallF,
+    input StallD,
+    input FlushD,
+    input FlushE,
+    input ForwardAE,
+    input ForwardBE,
+    output [4:0] H_Rs1D,
+    output [4:0] H_Rs2D,
+    output [4:0] H_RdE,
+    output [4:0] H_Rs1E,
+    output [4:0] H_Rs2E,
+    output [1:0] H_PCSrcE,
+    output [4:0] H_RdM,
+    output [4:0] H_RdW,
+    output H_ResultSrcE0,
+    output [1:0] H_ResultSrcM,
+    output H_RegWriteM,
+    output H_RegWriteW
 );
+    wire [31:0] PCFP, PCF, PCD, PCE;
+    wire [31:0] PCPlus4F, PCTragetE, PCPlus4D, PCPlus4E, PCPlus4M, PCPlus4W;
+    wire [1:0] PCSrcE;
+
+    wire [31:0] InstrF, InstrD;
+
+    wire [31:0] RD1D, RD2D, RD1E, RD2E;
+
+    wire [31:0] ExtImmD, ExtImmE, ExtImmM, ExtImmW;
+
+    wire [4:0] Rs1D, Rs2D, RdD, Rs1E, Rs2E, RdE, RdM, RdW;
+
+    wire [1:0] ResultSrcE, ResultSrcM, ResultSrcW;
+
+    wire RegWriteE, RegWriteM, RegWriteW;
+    wire MemWriteE, MemWriteM;
+    wire [31:0] ReadDataM, ReadDataW;
+
+    wire [1:0] JumpE;
+    wire [2:0] BranchE;
+
+    wire [31:0] SrcAE, SrcBE, RegBE, WriteDataE, WriteDataM;
+    wire [31:0] ALUResultE, ALUResultM, ALUResultW;
+    wire [2:0] ALUControlE;
+    wire ALUSrcE;
+    wire Zero, Neg;
+
+    wire [31:0] ResultW;
+
+    assign {H_Rs1D, H_Rs2D, H_RdE, H_Rs1E, H_Rs2E, H_PCSrcE,
+            H_RdM, H_RdW, H_ResultSrcE0, H_ResultSrcM, H_RegWriteM, H_RegWriteW} =
+           {Rs1D, Rs2D, RdE, Rs1E, Rs2E, PCSrcE, RdM, RdW, 
+            ResultSrcE[0], ResultSrcM, RegWriteM, RegWriteW};
+
     // F part
     multiplexer_4to1 mux_pc(
         .S(PCSrcE),
@@ -16,7 +84,7 @@ module data_path (
         .rst(rst),
         .data_in(PCFP),
         .data_out(PCF),
-        .enable(StalF)
+        .enable(~StallF)
     );
 
     memory_inst mem_inst(
@@ -35,10 +103,10 @@ module data_path (
     );
 
     // D part
-    register #(.bit(3*32)) reg_F_D(
+    register #(.bit(96)) reg_F_D(
         .clk(clk),
         .rst(rst | FlushD),
-        .ld(StalD),
+        .ld(~StallD),
         .par_in({InstrF, PCF, PCPlus4F}),
         .par_in({InstrD, PCD, PCPlus4D})
     );
@@ -60,12 +128,15 @@ module data_path (
         .extended_data(ExtImmD)
     );
 
-
     assign Rs1D = InstrD[19:15];
     assign Rs2D = InstrD[24:20];
     assign RdD = InstrD[11:7];
 
-    register #(.bit(/*TODO*/)) reg_D_E(
+    assign op = InstrD[6:0];
+    assign func3 = InstrD[14:12];
+    assign func7 = InstrD[31:25];
+
+    register #(.bit(189)) reg_D_E(
         .clk(clk),
         .rst(rst | FlushE),
         .ld(1'b1),
@@ -81,7 +152,7 @@ module data_path (
         .D0(RD1E),
         .D1(ResultW),
         .D2(ALUResultM),
-        .D3(32'b0),
+        .D3(ExtImmM),
         .Y(SrcAE)
     );
     multiplexer_4to1 alusrcregB(
@@ -89,7 +160,7 @@ module data_path (
         .D0(RD2E),
         .D1(ResultW),
         .D2(ALUResultM),
-        .D3(32'b0),
+        .D3(ExtImmM),
         .Y(RegBE)
     );
     multiplexer_2to1  alusrcB(
@@ -122,7 +193,7 @@ module data_path (
 
     assign WriteDataE = RegBE;
 
-    register #(.bit(/*TODO*/)) reg_E_M(
+    register #(.bit(137)) reg_E_M(
         .clk(clk),
         .rst(rst),
         .ld(1'b1),
@@ -142,7 +213,7 @@ module data_path (
         .RD(ReadDataM)
     );
 
-    register #(.bit(/*TODO*/)) reg_M_W(
+    register #(.bit(135)) reg_M_W(
         .clk(clk),
         .rst(rst),
         .ld(1'b1),
