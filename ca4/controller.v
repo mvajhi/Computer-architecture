@@ -99,7 +99,7 @@ module controller(
             end
 
             B_type: begin
-                ALUSrc = ALU_src_imm;
+                ALUSrc = ALU_src_reg;
                 ALUControl = op_sub;
                 ImmSrc = imm_B_type;
 
