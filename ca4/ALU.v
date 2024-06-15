@@ -6,13 +6,7 @@ module ALU (
     output reg Zero,
     output reg Neg
 );
-    parameter op_add  = 3'b000;
-    parameter op_sub  = 3'b001;
-    parameter op_and  = 3'b010;
-    parameter op_or   = 3'b011;
-    parameter op_slt  = 3'b100;
-    parameter op_sltu = 3'b101;
-    parameter op_xor  = 3'b110;
+    `include "constants.vh"
     always @(*) begin
         case(ALUOp)
             op_add: ALUResult = A + B;

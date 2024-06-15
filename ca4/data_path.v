@@ -20,8 +20,8 @@ module data_path (
     input StallD,
     input FlushD,
     input FlushE,
-    input ForwardAE,
-    input ForwardBE,
+    input [1:0] ForwardAE,
+    input [1:0] ForwardBE,
     output [4:0] H_Rs1D,
     output [4:0] H_Rs2D,
     output [4:0] H_RdE,
@@ -108,7 +108,7 @@ module data_path (
         .rst(rst | FlushD),
         .ld(~StallD),
         .par_in({InstrF, PCF, PCPlus4F}),
-        .par_in({InstrD, PCD, PCPlus4D})
+        .par_out({InstrD, PCD, PCPlus4D})
     );
 
     file_reg Reg_file(
@@ -117,6 +117,7 @@ module data_path (
         .A1(InstrD[19:15]),
         .A2(InstrD[24:20]),
         .A3(RdW),
+        .WD(ResultW),
         .We(RegWriteW),
         .RD1(RD1D),
         .RD2(RD2D)
@@ -136,13 +137,13 @@ module data_path (
     assign func3 = InstrD[14:12];
     assign func7 = InstrD[31:25];
 
-    register #(.bit(189)) reg_D_E(
+    register #(.bit(188)) reg_D_E(
         .clk(clk),
         .rst(rst | FlushE),
         .ld(1'b1),
         .par_in({RegWriteD, ResultSrcD, MemWriteD, JumpD, BranchD, ALUControlD, ALUSrcD ,
         RD1D, RD2D, PCD, Rs1D, Rs2D, RdD, ExtImmD, PCPlus4D}),
-        .par_in({RegWriteE, ResultSrcE, MemWriteE, JumpE, BranchE, ALUControlE, ALUSrcE ,
+        .par_out({RegWriteE, ResultSrcE, MemWriteE, JumpE, BranchE, ALUControlE, ALUSrcE ,
         RD1E, RD2E, PCE, Rs1E, Rs2E, RdE, ExtImmE, PCPlus4E})
     );
 
@@ -173,7 +174,7 @@ module data_path (
         .A(SrcAE),
         .B(SrcBE),
         .ALUOp(ALUControlE),
-        .ALUResult(ALUResultE)
+        .ALUResult(ALUResultE),
         .Zero(Zero),
         .Neg(Neg)
     );
@@ -199,7 +200,7 @@ module data_path (
         .ld(1'b1),
         .par_in({RegWriteE, ResultSrcE, MemWriteE,
         ALUResultE, WriteDataE, RdE, ExtImmE, PCPlus4E}),
-        .par_in({RegWriteM, ResultSrcM, MemWriteM,
+        .par_out({RegWriteM, ResultSrcM, MemWriteM,
         ALUResultM, WriteDataM, RdM, ExtImmM, PCPlus4M})
     );
 
@@ -213,13 +214,13 @@ module data_path (
         .RD(ReadDataM)
     );
 
-    register #(.bit(135)) reg_M_W(
+    register #(.bit(136)) reg_M_W(
         .clk(clk),
         .rst(rst),
         .ld(1'b1),
         .par_in({RegWriteM, ResultSrcM,
         ALUResultM, ReadDataM, RdM, ExtImmM, PCPlus4M}),
-        .par_in({RegWriteW, ResultSrcW,
+        .par_out({RegWriteW, ResultSrcW,
         ALUResultW, ReadDataW, RdW, ExtImmW, PCPlus4W})
     );
 

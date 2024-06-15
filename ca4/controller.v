@@ -11,12 +11,12 @@ module controller(
     output reg ALUSrc,
     output reg [2:0] ImmSrc
 );
-    `include "constants.v"
+    `include "constants.vh"
     always @(*) begin
         {RegWrite, ResultSrc, MemWrite, Jump, Branch, ALUControl, ALUSrc, ImmSrc} = 16'b0;
         case(op)
             R_type: begin
-                RegWrite = 1'b2;
+                RegWrite = 1'b1;
                 ResultSrc = Result_ALU;
                 ALUSrc = ALU_src_reg;
 

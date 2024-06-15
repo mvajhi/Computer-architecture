@@ -15,10 +15,10 @@ module hazard_unit(
     output reg StallD,
     output reg FlushD,
     output reg FlushE,
-    output reg ForwardAE,
-    output reg ForwardBE
+    output reg [1:0] ForwardAE,
+    output reg [1:0] ForwardBE
 );
-    `include "constants.v"
+    `include "constants.vh"
     always @(*) begin
         if (((Rs1E == RdM) && RegWriteM) && (Rs1E != 0))
             ForwardAE = (ResultSrcM == Result_imm) ? Forward_ImmM : Forward_ALUM;
