@@ -101,13 +101,19 @@ module controller(
             B_type: begin
                 ALUSrc = ALU_src_imm;
                 ALUControl = op_sub;
-                Branch = func3;
                 ImmSrc = imm_B_type;
 
                 RegWrite = 1'b0;
                 Jump = J_disable;
                 MemWrite = 1'b0;
                 ResultSrc = Result_ALU;
+
+                case(func3)
+                    func3_B_type_beq : Branch = B_type_beq;
+                    func3_B_type_bne : Branch = B_type_bne;
+                    func3_B_type_blt : Branch = B_type_blt;
+                    func3_B_type_bge : Branch = B_type_bge;
+                endcase
             end
 
             J_type: begin

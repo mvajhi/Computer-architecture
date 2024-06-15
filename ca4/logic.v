@@ -14,10 +14,10 @@ module logic (
         endcase
         
         case(Branch)
-            func3_B_type_beq: PCSrc = Zero ? PC_imm : PC_4;
-            func3_B_type_bne: PCSrc = Zero ? PC_4 : PC_imm;
-            func3_B_type_blt: PCSrc = Neg ? PC_imm : PC_4;
-            func3_B_type_bge: PCSrc = Neg ? PC_4 : PC_imm;
+            B_type_beq: PCSrc = Zero ? PC_imm : PC_4;
+            B_type_bne: PCSrc = Zero ? PC_4 : PC_imm;
+            B_type_blt: PCSrc = Neg ? PC_imm : PC_4;
+            B_type_bge: PCSrc = Neg ? PC_4 : PC_imm;
         endcase
     end
 endmodule

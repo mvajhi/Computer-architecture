@@ -37,7 +37,6 @@ parameter func3_B_type_beq = 3'b000;
 parameter func3_B_type_bne = 3'b001;
 parameter func3_B_type_blt = 3'b100;
 parameter func3_B_type_bge = 3'b101;
-parameter B_disable = 3'b110;
 
 // func3 J type code
 parameter func3_J_type_jal = 3'b000;
@@ -69,9 +68,16 @@ parameter op_xor  = 3'b110;
 parameter op_default = 3'b000;
 
 // Jump
-parameter JumpJal = 2'b00;
+parameter J_disable = 2'b00;
 parameter JumpJalr = 2'b01;
-parameter J_disable = 2'b10;
+parameter JumpJal = 2'b10;
+
+// B type code for logic
+parameter B_disable = 3'b000;
+parameter B_type_beq = 3'b001;
+parameter B_type_bne = 3'b100;
+parameter B_type_blt = 3'b101;
+parameter B_type_bge = 3'b110;
 
 // ResultSrc
 parameter Result_ALU = 2'b00;

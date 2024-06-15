@@ -38,9 +38,9 @@ module hazard_unit(
     end
 
     wire lwStall;
-    assign lwStall = ((Rs1D == RdE) || (Rs2D == RdE)) && ResultSrcE0;
+    assign lwStall = ((Rs1D == RdE) || (Rs2D == RdE)) && ResultSrcE0 && (RdE != 5'b0);
     assign StallF = lwStall;
     assign StallD = lwStall;
-    assign FlushD = PCSrcE;
-    assign FlushE = PCSrcE || lwStall;
+    assign FlushD = PCSrcE != 2'b0;
+    assign FlushE = PCSrcE != 2'b0 || lwStall;
 endmodule
